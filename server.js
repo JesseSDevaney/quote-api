@@ -76,6 +76,18 @@ app.put("/api/quotes/:id(\\d+)", (req, res) => {
   }
 });
 
+app.delete("/api/quotes/:id(\\d+)", (req, res) => {
+  const quoteId = Number(req.params.id);
+
+  const quoteIndex = quotes.findIndex(({ id }) => id === quoteId);
+  if (quoteIndex !== -1) {
+    quotes.splice(quoteIndex, 1);
+    res.status(204).send();
+  } else {
+    res.status(404).send("resource not found");
+  }
+});
+
 app.get("/api/quotes/random", (req, res) => {
   const quote = getRandomElement(quotes);
   res.json({ quote });
