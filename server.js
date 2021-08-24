@@ -53,6 +53,28 @@ app.get("/api/quotes/:id(\\d+)", (req, res) => {
   }
 });
 
+app.put("/api/quotes/:id(\\d+)", (req, res) => {
+  if (!(req.query.quote && req.query.person)) {
+    res.status(400).send("invalid request");
+    return;
+  }
+
+  const quoteId = Number(req.params.id);
+  const quoteUpdate = {
+    id: quoteId,
+    quote: req.query.quote,
+    person: req.query.person,
+  };
+
+  const quoteIndex = quotes.findIndex(({ id }) => id === quoteId);
+  if (quoteIndex === -1) {
+    quotes.push(quoteUpdate);
+    res.status(201).json({ quote: quoteUpdate });
+  } else {
+    quotes[quoteIndex] = quoteUpdate;
+    res.status(200).json({ quote: quoteUpdate });
+  }
+});
 
 app.get("/api/quotes/random", (req, res) => {
   const quote = getRandomElement(quotes);
