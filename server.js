@@ -19,6 +19,22 @@ app.get("/api/quotes", (req, res) => {
   }
 });
 
+app.post("/api/quotes", (req, res) => {
+  const query = req.query;
+
+  if (query.quote && query.person) {
+    const newQuote = {
+      quote: query.quote,
+      person: query.person,
+    };
+
+    quotes.push(newQuote);
+    res.status(201).json({ quote: newQuote });
+  } else {
+    res.status(400).send("request not valid");
+  }
+});
+
 app.get("/api/quotes/random", (req, res) => {
   const quote = getRandomElement(quotes);
   res.json({ quote });
