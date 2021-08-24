@@ -8,6 +8,17 @@ const PORT = process.env.PORT || 4001;
 
 app.use(express.static("public"));
 
+app.get("/api/quotes", (req, res) => {
+  if ("person" in req.query) {
+    const filteredQuotes = quotes.filter(
+      ({ person }) => person === req.query.person
+    );
+    res.json({ quotes: filteredQuotes });
+  } else {
+    res.json({ quotes });
+  }
+});
+
 app.get("/api/quotes/random", (req, res) => {
   const quote = getRandomElement(quotes);
   res.json({ quote });
